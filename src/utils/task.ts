@@ -45,6 +45,16 @@ export const removeTaskFromStorage = async (taskId: string) => {
   }
 }
 
+export const removeMultipleTasksFromStorage = async (taskIds: string[]) => {
+  try {
+    const tasks = await getTasksFromStorage();
+    const newTasks = tasks?.filter((t: ITask) => !taskIds.includes(t.id));
+    await storage.setTasks(JSON.stringify(newTasks));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const clearTasksFromStorage = async () => {
   try {
     await storage.removeTasks();
@@ -100,3 +110,11 @@ export const validationSchema = Yup.object().shape({
   title: Yup.string().required('El título es requerido'),
   body: Yup.string().optional(),
 });
+
+export const getMostRecentTask = (tasks: ITask[]) => {
+  return tasks.length > 0 ? parseTaskDate(tasks[0].created_at) : null;
+}
+
+export const getOldestTask = (tasks: ITask[]) => {
+  return tasks.length > 0 ? parseTaskDate(tasks[tasks.length - 1].created_at) : null;
+}

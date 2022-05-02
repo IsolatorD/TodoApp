@@ -8,16 +8,19 @@ import TaskListItem from "./TaskListItem";
 
 interface ITaskListProps {
   tasks: ITask[];
+  selectedTasks: string[];
+  isOpenTaskSelector: boolean;
   onPressTask: (task: ITask) => void;
+  onSelectTask: (taskId: string) => void;
 }
-const TaskList:React.FC<ITaskListProps> = ({ tasks, onPressTask }) => {
+const TaskList:React.FC<ITaskListProps> = ({ tasks, selectedTasks, isOpenTaskSelector, onPressTask, onSelectTask }) => {
   return (
     <FlatList
       style={styles.content}
       contentContainerStyle={styles.list}
       data={tasks}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <TaskListItem task={item} onPressTask={onPressTask} />}
+      renderItem={({ item }) => <TaskListItem task={item} selectedTasks={selectedTasks} isOpenTaskSelector={isOpenTaskSelector} onPressTask={onPressTask} onSelectTask={onSelectTask} />}
       ListEmptyComponent={() => <Empty icon={icons.list} message='No hay tareas' />}
       showsVerticalScrollIndicator={false}
     />

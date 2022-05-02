@@ -4,13 +4,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   HomeScreen,
   SplashScreen,
+  StatisticsScreen,
   TaskDetailsScreen,
   TaskEditorScreen
 } from '../screens'
 import { DEFAULT_NAVIGATOR_OPTIONS } from "../constants/navigator";
 import { AppNavigatorParamsList } from "../interfaces/navigator";
-import { FONTS } from "../constants/theme";
-import icons from "../constants/icons";
 
 const Stack = createNativeStackNavigator<AppNavigatorParamsList>();
 
@@ -39,6 +38,13 @@ const AppNavigator:React.FC = () => {
         <Stack.Screen
           name="TaskDetailsScreen"
           component={TaskDetailsScreen}
+          options={{
+            animation: 'slide_from_right'
+          }}
+        />
+        <Stack.Screen
+          name="StatisticsScreen"
+          component={StatisticsScreen}
           options={{
             animation: 'slide_from_right'
           }}

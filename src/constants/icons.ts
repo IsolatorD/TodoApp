@@ -10,6 +10,8 @@ const plus = require('../assets/icons/plus.png');
 const search = require('../assets/icons/search.png');
 const theme = require('../assets/icons/theme.png');
 const undo = require('../assets/icons/undo.png');
+const selectAll = require('../assets/icons/select_all.png');
+const statistics = require('../assets/icons/statistics.png');
 
 export default {
   arrow,
@@ -24,4 +26,6 @@ export default {
   search,
   theme,
   undo,
+  selectAll,
+  statistics,
 }

@@ -8,9 +8,12 @@ import TaskGridItem from "./TaskGridItem";
 
 interface ITaskGridProps {
   tasks: ITask[];
+  selectedTasks: string[];
+  isOpenTaskSelector: boolean;
   onPressTask: (task: ITask) => void;
+  onSelectTask: (taskId: string) => void;
 }
-const TaskGrid:React.FC<ITaskGridProps> = ({ tasks, onPressTask }) => {
+const TaskGrid:React.FC<ITaskGridProps> = ({ tasks, selectedTasks, isOpenTaskSelector, onPressTask, onSelectTask}) => {
   return (
     <FlatList
       style={styles.content}
@@ -18,7 +21,7 @@ const TaskGrid:React.FC<ITaskGridProps> = ({ tasks, onPressTask }) => {
       data={tasks}
       numColumns={2}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <TaskGridItem task={item} onPressTask={onPressTask} />}
+      renderItem={({ item }) => <TaskGridItem task={item} selectedTasks={selectedTasks} isOpenTaskSelector={isOpenTaskSelector} onPressTask={onPressTask} onSelectTask={onSelectTask} />}
       ListEmptyComponent={() => <Empty icon={icons.grid} message='No hay tareas' />}
       showsVerticalScrollIndicator={false}
     />

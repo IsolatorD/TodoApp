@@ -3,18 +3,15 @@ import { Image, StyleSheet, Text } from "react-native"
 import Container from "../components/Container";
 import images from "../constants/images";
 import { COLORS, FONTS } from "../constants/theme";
-import { useTask } from "../hooks/useTask";
 import { SplashScreenProps } from "../interfaces/navigator";
 
 const SplashScreen:React.FC<SplashScreenProps> = ({ navigation }) => {
-  const { loading } = useTask();
 
   useEffect(() => {
     setTimeout(() => {
-      if (loading) return;
       navigation.navigate("HomeScreen");
-    }, 1000);
-  })
+    }, 2000);
+  }, [])
 
   return (
     <Container centered>
@@ -26,7 +23,7 @@ const SplashScreen:React.FC<SplashScreenProps> = ({ navigation }) => {
       <Text
         style={styles.title}
       >
-        Task Manager
+        Note Manager
       </Text>
     </Container>
   )

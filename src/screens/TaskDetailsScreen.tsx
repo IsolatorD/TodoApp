@@ -1,17 +1,55 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { useEffect } from "react";
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import ButtonIcon from "../components/ButtonIcon";
 import Container from "../components/Container";
 import Fab from "../components/Fab";
 import icons from "../constants/icons";
-import { FONTS, SIZES } from "../constants/theme";
+import { COLORS, FONTS, SIZES } from "../constants/theme";
+import { userBackHandler } from "../hooks/useBackHandler";
+import { useTask } from "../hooks/useTask";
 import { TaskDetailsScreenProps } from "../interfaces/navigator";
+import { Types } from "../store/reducer";
+import { removeTaskFromStorage } from "../utils/task";
 
-const TaskDetailsScreen:React.FC<TaskDetailsScreenProps> = ({ route, navigation }) => {
-  const { task } = route?.params;
-  
+const TaskDetailsScreen:React.FC<TaskDetailsScreenProps> = ({ navigation }) => {
+  userBackHandler({ isHome: false })
+  const { state: { task }, dispatch } = useTask()
+
   const onBackPress = () => {
     navigation.goBack();
+    dispatch({
+      type: Types.ClearTask,
+      payload: {}
+    })
+  }
+
+  const onPressEdit = () => {
+    navigation.navigate("TaskEditorScreen", { task });
+  }
+
+  const onPressDelete = () => {
+    Alert.alert('Borrar nota', '¿Estás seguro de que quieres borrar esta nota?', [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+      {
+        text: 'Borrar',
+        onPress: onConfirmDelete
+      },
+    ])
+  }
+
+  const onConfirmDelete = async () => {
+    await dispatch({
+      type: Types.DeleteTask,
+      payload: {
+        taskId: task.id
+      }
+    })
+    await removeTaskFromStorage(task.id)
+    onBackPress()
   }
 
   return (
@@ -22,6 +60,12 @@ const TaskDetailsScreen:React.FC<TaskDetailsScreenProps> = ({ route, navigation 
           icon={icons.arrow}
           onPress={onBackPress}
           style={styles.backButton}
+        />
+        <Text style={styles.headerTitle}>Detalles de la nota</Text>
+        <ButtonIcon
+          size={22}
+          icon={icons.deleteIcon}
+          onPress={onPressDelete}
         />
       </View>
       <View
@@ -40,7 +84,7 @@ const TaskDetailsScreen:React.FC<TaskDetailsScreenProps> = ({ route, navigation 
       </View>
       <Fab
         icon={icons.edit}
-        onPress={() => {}}
+        onPress={onPressEdit}
       />
     </Container>
   );
@@ -54,9 +98,15 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: SIZES.padding / 2
+    padding: SIZES.padding / 2,
+  },
+  headerTitle: {
+    ...FONTS.subtitle,
+    fontWeight: 'bold',
+    color: COLORS.black,
+    textAlign: 'center',
   },
   backButton: {
     transform: [{ rotate: '180deg' }],
